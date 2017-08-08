@@ -24,7 +24,7 @@ class CourseComments(models.Model):
     add_time=models.DateField(default=datetime.now)
 
     class Meta:
-        verbose_name="用户咨询"
+        verbose_name="用户评论"
         verbose_name_plural=verbose_name      
 
 class UserFavorite(models.Model):
@@ -55,5 +55,5 @@ class UserCourse(models.Model):
     add_time=models.DateField(default=datetime.now)
 
     class Meta:
-        verbose_name="用户咨询"
+        verbose_name="用户课程"
         verbose_name_plural=verbose_name

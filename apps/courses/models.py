@@ -16,7 +16,7 @@ class Course(models.Model):
     add_time=models.DateField(default=datetime.now,verbose_name="添加时间")
 
     class Meta:
-        verbose_name="验证码"
+        verbose_name="课程"
         verbose_name_plural=verbose_name
 
 class Lesson(models.Model):

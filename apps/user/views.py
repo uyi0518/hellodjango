@@ -31,6 +31,8 @@ class LoginView(View):
                 return render(request, "index/index.html")
             else:
                 return render(request, "login/sign.html", {msg:"用户名或密码错误"})
+        else:
+            return render(request, "login/sign.html", {login_form:login_form})
 
 
 

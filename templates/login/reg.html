@@ -13,17 +13,21 @@
 	#btn {display: block;width: 150px;text-align: center;border:1px;background-color: #e68a00;color: #fff;margin: 30px auto;border-radius: 5px;}
     input:focus{border:1px solid blue;}
     #btn:focus{border:1px solid blue;}
+    .ident{margin-top: 30px;}
+    .ident span{float: left;}
+    .ident input{float:left;width: 300px;}
+    .ident img{float:right;vertical-align: middle;}
 	</style>
 </head>
 <body>
 <div class="main">
 <div class="head">注册页面</div>
-	<form action="/polls/signin/" method="post">
+	<form action="/reg/" method="post">
 		{% csrf_token %}
-		<label for="user">用户名</label><input type="text" name="user" id="user" >
+		<label for="email">邮箱</label><input type="text" name="username" id="email"  >
 		<label for="password-f">密码</label><input type="password" name="password" id="password-f"  >
-		<label for="password-s">请确认密码</label><input type="password" name="password1" id="password-s"  >
-		<label for="email">邮箱</label><input type="text" name="email" id="email"  >
+
+		<label for="yanzhengma" class="ident"><span>验证码</span>{{ reg_form.captcha }}</label>
 		<button type="summit" id="btn">提交</button>
 	</form>
 </div>

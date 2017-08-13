@@ -16,9 +16,12 @@ Including another URLconf
 from django.conf.urls import include, url
 from django.contrib import admin
 from django.views.generic import TemplateView
+from user.views import LoginView,RegView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    # url(r'^polls/', include('polls.urls')),
-    url(r'^$',TemplateView.as_view(template_name='index/index.html'),name="index")
+    url(r'^captcha/', include('captcha.urls')),
+    url(r'^$',TemplateView.as_view(template_name='index/index.html'),name="index"),
+    url(r'^login/$',LoginView.as_view(),name="login"),
+    url(r'^reg/$', RegView.as_view(), name="reg"),
 ]

@@ -6,7 +6,8 @@ from django.contrib.auth.backends import  ModelBackend
 from  .models import  userProfile
 from django.db.models import Q
 from django.views.generic.base import View
-from .forms import LoginForm
+from .forms import LoginForm,RegForm
+from django.contrib.auth.hashers import make_password
 
 class CustomBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
@@ -18,10 +19,10 @@ class CustomBackend(ModelBackend):
             return  None
 
 class LoginView(View):
-    def get(self,requset):
-        return render(request, "login/sign.html", {})
-    def post(self,requset):
-        login_form=LoginForm(requset.POST)
+    def get(self,request):
+        return render(request, "login/login.html", {})
+    def post(self,request):
+        login_form=LoginForm(request.POST)
         if login_form.is_valid():
             user_name = request.POST.get("username", "")
             pass_word = request.POST.get("password", "")
@@ -30,9 +31,23 @@ class LoginView(View):
                 login(request, user)
                 return render(request, "index/index.html")
             else:
-                return render(request, "login/sign.html", {msg:"用户名或密码错误"})
+                return render(request, "login/login.html", {msg:"用户名或密码错误"})
         else:
-            return render(request, "login/sign.html", {login_form:login_form})
+            return render(request, "login/login.html", {login_form:login_form})
 
+class RegView(View):
+    def get(self,request):
+        reg_form=RegForm()
+        return  render(request, "login/reg.html",{'reg_form':reg_form})
 
-
+    def post(self,request):
+        reg_form = RegForm()
+        if  reg_form.is_valid():
+            user_name = request.POST.get("username", "")
+            pass_word = request.POST.get("password", "")
+            user_Profile=userProfile()
+            user_Profile.name=user_name
+            user_Profile.email=user_name
+            user_Profile.password=make_password(pass_word)
+            user_Profile.save()
+            pass

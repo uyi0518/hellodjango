@@ -31,7 +31,7 @@ ALLOWED_HOSTS = []
 
 # Application definition
 AUTHENTICATION_BACKENDS=(
-
+'user.views.CustomBackend',
 )
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'courses',
     'organization',
     'operation',
+    'captcha',
 ]
 AUTH_USER_MODEL="user.userProfile"
 

@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.views.generic.base import View
 from .forms import LoginForm,RegForm
 from django.contrib.auth.hashers import make_password
+from utilss.email_send import send_reg_email
 
 class CustomBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None, **kwargs):
@@ -41,13 +42,14 @@ class RegView(View):
         return  render(request, "login/reg.html",{'reg_form':reg_form})
 
     def post(self,request):
-        reg_form = RegForm()
+        reg_form = RegForm(request.POST)
         if  reg_form.is_valid():
-            user_name = request.POST.get("username", "")
+            user_name = request.POST.get("email", "")
             pass_word = request.POST.get("password", "")
             user_Profile=userProfile()
             user_Profile.name=user_name
             user_Profile.email=user_name
             user_Profile.password=make_password(pass_word)
             user_Profile.save()
+            send_reg_email(user_name,'register')
             pass

@@ -24,7 +24,7 @@
 <div class="head">注册页面</div>
 	<form action="/reg/" method="post">
 		{% csrf_token %}
-		<label for="email">邮箱</label><input type="text" name="username" id="email"  >
+		<label for="email">邮箱</label><input type="text" name="email" id="email"  >
 		<label for="password-f">密码</label><input type="password" name="password" id="password-f"  >
 
 		<label for="yanzhengma" class="ident"><span>验证码</span>{{ reg_form.captcha }}</label>

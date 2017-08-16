@@ -47,9 +47,12 @@ class RegView(View):
             user_name = request.POST.get("email", "")
             pass_word = request.POST.get("password", "")
             user_Profile=userProfile()
-            user_Profile.name=user_name
+            user_Profile.username=user_name
             user_Profile.email=user_name
             user_Profile.password=make_password(pass_word)
             user_Profile.save()
             send_reg_email(user_name,'register')
-            pass
+            return HttpResponse("注册失败")
+        else:
+            return HttpResponse("注册成功")
+            

@@ -1,181 +1,311 @@
+{% load staticfiles %}
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title></title>
-	<link rel="stylesheet" type="text/css" href="js/jquery.fullpage.min.css">
-	<link rel="stylesheet" type="text/css" href="js/swiper.min.css">
-	<style type="text/css">
-		*{box-sizing: border-box;}
-		.choose {width: 1200px;height: 600px;position: absolute;left: 50%;top: 50%;margin-left: -500px;margin-top: -300px;border-radius: 20px;background: rgba(102, 204, 255,0.5);}
-		._put,._pull {width: 50%;height: 100%;border-radius: 50%;float: left;background: #fff;position: relative;}
-		img {width: 100px;height: 100px;border: solid 2px #FFF;border-radius: 100px;}
-		._put_1,._pull_1{position: absolute;width: 400px;height: 400px;top: 100px;left: 100px;border: 1px solid black;}
-		._put_1 img ,._pull_1 img {margin: 10px 14px;}
-		._put_1 img:nth-of-type(1){display: block;cursor: not-allowed;filter: grayscale(100%);transform:translate(100px);}
-		._put_1 img:nth-of-type(2),._put_1 img:nth-of-type(3),._pull_1 img:nth-of-type(2),._pull_1 img:nth-of-type(3){margin: 10px 40px;}
-		._pull_1 img:nth-of-type(1){margin: 0 130px;cursor: not-allowed;}
-	</style>
-	<script type="text/javascript" src="js/jquery-3.2.1.min.js"></script>
-	<script type="text/javascript" src="js/jquery.fullpage.js"></script>
-	<script type="text/javascript" src="js/Sortable.min.js"></script>
-	<script type="text/javascript" src="js/swiper.jquery.js"></script>
-	
-</head>
-<body>
-<div class="_container">
-	<div class="section">
-		<canvas id="cav"></canvas>
-		<div class="choose">
-			<div class="_put">
-				<div class="_put_1" id="goput">
-				<img src="https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=0ba8ebf805f431adaa981e6a3959dc92/0b55b319ebc4b745fab6b97cc6fc1e178a8215bd.jpg">
-				
-				<img src="https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=6da3217506d79123f6aac927df5b29bf/4afbfbedab64034fdfd3b37ba5c379310a551db4.jpg">
-				<img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=2537556e9a52982213796490a5a50bf6/738b4710b912c8fca0da9f64f6039245d6882169.jpg">
-				<img src="https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=87e8f5a53301213fd979138f268846ec/f703738da9773912b9e3441df2198618377ae281.jpg">
-				<img src="https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=5ed4a4a072cb0a469368d66a190c8619/c2fdfc039245d6888618f4feadc27d1ed21b2455.jpg">
-				<img src="https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=15a1cf7103f79052f9551a6d7e9ca7f7/cc11728b4710b912fdf94a9cc9fdfc0392452293.jpg">
-				</div>
-			</div>
-			<div class="_pull">
-				<div class="_pull_1" id="gopull">
-					
-				</div>
-			</div>
-
-		</div>
-	</div>
-	<div class="section">
-		
-	</div>
-	<div class="section">
-		
-	</div>
-	<div class="section">
-		
-	</div>
-
-
-
-</div>
-
-<script type="text/javascript">
-$(function(){
-    $('._container').fullpage({
-        
-        continuousVertical: false,
-        'navigation': true,
-
-    });
-});
-//动画
-var canvas = document.getElementById("cav");
-  var ctx = canvas.getContext("2d");
-  resize();
-  window.onresize = resize;
-  function resize() {
-    canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-    canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-  }
-  var RAF = (function() {
-    return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
-          window.setTimeout(callback, 1000 / 60);
-        };
-  })();
-  // 鼠标活动时，获取鼠标坐标
-  var warea = {x: null, y: null, max: 20000};
-  window.onmousemove = function(e) {
-    e = e || window.event;
-    warea.x = e.clientX;
-    warea.y = e.clientY;
-  };
-  window.onmouseout = function(e) {
-    warea.x = null;
-    warea.y = null;
-  };
-  // 添加粒子
-  // x，y为粒子坐标，xa, ya为粒子xy轴加速度，max为连线的最大距离
-  var dots = [];
-  for (var i = 0; i < 300; i++) {
-    var x = Math.random() * canvas.width;
-    var y = Math.random() * canvas.height;
-    var xa = Math.random() * 2 - 1;
-    var ya = Math.random() * 2 - 1;
-    dots.push({
-      x: x,
-      y: y,
-      xa: xa,
-      ya: ya,
-      max: 6000
-    })
-  }
-  // 延迟100秒开始执行动画，如果立即执行有时位置计算会出错
-  setTimeout(function() {
-    animate();
-  }, 100);
-  // 每一帧循环的逻辑
-  function animate() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // 将鼠标坐标添加进去，产生一个用于比对距离的点数组
-    var ndots = [warea].concat(dots);
-    dots.forEach(function(dot) {
-      // 粒子位移
-      dot.x += dot.xa;
-      dot.y += dot.ya;
-      // 遇到边界将加速度反向
-      dot.xa *= (dot.x > canvas.width || dot.x < 0) ? -1 : 1;
-      dot.ya *= (dot.y > canvas.height || dot.y < 0) ? -1 : 1;
-      // 绘制点
-      ctx.fillRect(dot.x - 0.5, dot.y - 0.5, 1, 1);
-      // 循环比对粒子间的距离
-      for (var i = 0; i < ndots.length; i++) {
-        var d2 = ndots[i];
-        if (dot === d2 || d2.x === null || d2.y === null) continue;
-        var xc = dot.x - d2.x;
-        var yc = dot.y - d2.y;
-        // 两个粒子之间的距离
-        var dis = xc * xc + yc * yc;
-        // 距离比
-        var ratio;
-        // 如果两个粒子之间的距离小于粒子对象的max值，则在两个粒子间画线
-        if (dis < d2.max) {
-          // 如果是鼠标，则让粒子向鼠标的位置移动
-          if (d2 === warea && dis > (d2.max / 2)) {
-            dot.x -= xc * 0.03;
-            dot.y -= yc * 0.03;
-          }
-          // 计算距离比
-          ratio = (d2.max - dis) / d2.max;
-          // 画线
-
-          ctx.beginPath();
-          ctx.lineWidth = ratio / 2;
-          ctx.strokeStyle = 'rgba(255,204,153' + (ratio + 0.2) + ')';
-          ctx.moveTo(dot.x, dot.y);
-          ctx.lineTo(d2.x, d2.y);
-          ctx.stroke();
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery.fullpage.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/swiper.min.css' %}">
+    <style type="text/css">
+        * {
+            box-sizing: border-box;
         }
-      }
-      // 将已经计算过的粒子从数组中删除
-      ndots.splice(ndots.indexOf(dot), 1);
-    });
-    RAF(animate);
-  }
-  //动画
-  //拖动---b
-   var el = document.getElementById('goput');
-   var sortable = Sortable.create(el, {
-    group:{name:"aaa",put:true,pull:true},
-    sort: true,  // sorting inside list
-    
-});
+        
+        .title {
+            width: 1000px;
+            height: 600px;
+            position: absolute;
+            top: 120px;
+            left: 600px;
+            font-size: 36px;
+            text-align: center;
+            color: #c44dff;
+        }
+        
+        .choose {
+            width: 1200px;
+            height: 600px;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            margin-left: -500px;
+            margin-top: -300px;
+            border-radius: 20px;
+            background: rgba(102, 204, 255, 0.5);
+        }
+        
+        ._put,
+        ._pull {
+            width: 50%;
+            height: 100%;
+            border-radius: 50%;
+            float: left;
+            background: #fff;
+            position: relative;
+        }
+        
+        img {
+            width: 100px;
+            height: 100px;
+            border: solid 2px #FFF;
+            border-radius: 100px;
+            float: left;
+        }
+        
+        ._put_1,
+        ._pull_1 {
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            top: 100px;
+            left: 100px;
+        }
+        
+        ._pull_1 {
+            background: #fff url(https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1501895974&di=64cbeb105f623b487d5f07850f79b11a&src=http://img5.cache.netease.com/henan/2016/1/26/201601261634249972e.jpg) no-repeat center;
+            background-size: 400px 400px;
+            border-radius: 20px;
+        }
+        
+        ._put_1 img,
+        ._pull_1 img {
+            margin: 10px 15px;
+        }
+        /*._put_1 img:nth-of-type(1){margin: 0 130px;cursor: not-allowed;filter: grayscale(100%);}
+        ._put_1 img:nth-of-type(2),._put_1 img:nth-of-type(3),._pull_1 img:nth-of-type(2),._pull_1 img:nth-of-type(3){margin: 10px 40px;}
+        ._pull_1 img:nth-of-type(1){margin: 0 130px;cursor: not-allowed;}*/
+    </style>
+    <script type="text/javascript" src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.fullpage.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/Sortable.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/swiper.jquery.min.js' %}"></script>
 
-    var el1 = document.getElementById('gopull');
-    var sortable = Sortable.create(el1, {
-    group: {name:"aaa",put:true,pull:true},
-    sort: true,  // sorting inside list
-    
-});
-</script>
+</head>
+
+<body>
+    <div class="_container">
+        <div class="section">
+            <canvas id="cav"></canvas>
+            <div class="title">把你讨厌的明星喂给北极熊吧</div>
+            <div class="choose">
+                <div class="_put">
+                    <div class="_put_1" id="goput">
+                        <img src="https://gss1.bdstatic.com/9vo3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=0ba8ebf805f431adaa981e6a3959dc92/0b55b319ebc4b745fab6b97cc6fc1e178a8215bd.jpg" data-xx="niangpao" class="abc">
+
+                        <img src="https://gss3.bdstatic.com/7Po3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=6da3217506d79123f6aac927df5b29bf/4afbfbedab64034fdfd3b37ba5c379310a551db4.jpg">
+                        <img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=2537556e9a52982213796490a5a50bf6/738b4710b912c8fca0da9f64f6039245d6882169.jpg">
+                        <img src="https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=87e8f5a53301213fd979138f268846ec/f703738da9773912b9e3441df2198618377ae281.jpg">
+                        <img src="https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=5ed4a4a072cb0a469368d66a190c8619/c2fdfc039245d6888618f4feadc27d1ed21b2455.jpg">
+                        <img src="https://gss1.bdstatic.com/-vo3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=15a1cf7103f79052f9551a6d7e9ca7f7/cc11728b4710b912fdf94a9cc9fdfc0392452293.jpg">
+                        <img src="https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=251ddc287fc6a7efaf6cf5758f95df6c/a08b87d6277f9e2fc50464ff1630e924b899f310.jpg">
+                        <img src="https://gss3.bdstatic.com/-Po3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=ddbd58372b381f308853d0fadb6e3c35/dc54564e9258d109f04cc3bdd258ccbf6c814d15.jpg">
+                        <img src="https://gss2.bdstatic.com/9fo3dSag_xI4khGkpoWK1HF6hhy/baike/awhcrop%3D200%2C200/sign=9bf787497c094b36cdd846bed1a30ce4/b64543a98226cffcb44dc624b3014a90f703eac5.jpg">
+                    </div>
+                </div>
+                <div class="_pull">
+                    <div class="_pull_1" id="gopull">
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="section">
+
+        </div>
+        <div class="section">
+
+        </div>
+        <div class="section">
+
+        </div>
+
+
+
+    </div>
+
+    <script type="text/javascript">
+        $(function() {
+            $('._container').fullpage({
+
+                continuousVertical: false,
+                'navigation': true,
+
+            });
+        });
+        //动画
+        var canvas = document.getElementById("cav");
+        var ctx = canvas.getContext("2d");
+        resize();
+        window.onresize = resize;
+
+        function resize() {
+            canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+        }
+        var RAF = (function() {
+            return window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
+                window.setTimeout(callback, 1000 / 60);
+            };
+        })();
+        // 鼠标活动时，获取鼠标坐标
+        var warea = {
+            x: null,
+            y: null,
+            max: 20000
+        };
+        window.onmousemove = function(e) {
+            e = e || window.event;
+            warea.x = e.clientX;
+            warea.y = e.clientY;
+        };
+        window.onmouseout = function(e) {
+            warea.x = null;
+            warea.y = null;
+        };
+        // 添加粒子
+        // x，y为粒子坐标，xa, ya为粒子xy轴加速度，max为连线的最大距离
+        var dots = [];
+        for (var i = 0; i < 300; i++) {
+            var x = Math.random() * canvas.width;
+            var y = Math.random() * canvas.height;
+            var xa = Math.random() * 2 - 1;
+            var ya = Math.random() * 2 - 1;
+            dots.push({
+                x: x,
+                y: y,
+                xa: xa,
+                ya: ya,
+                max: 6000
+            })
+        }
+        // 延迟100秒开始执行动画，如果立即执行有时位置计算会出错
+        setTimeout(function() {
+            animate();
+        }, 100);
+        // 每一帧循环的逻辑
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // 将鼠标坐标添加进去，产生一个用于比对距离的点数组
+            var ndots = [warea].concat(dots);
+            dots.forEach(function(dot) {
+                // 粒子位移
+                dot.x += dot.xa;
+                dot.y += dot.ya;
+                // 遇到边界将加速度反向
+                dot.xa *= (dot.x > canvas.width || dot.x < 0) ? -1 : 1;
+                dot.ya *= (dot.y > canvas.height || dot.y < 0) ? -1 : 1;
+                // 绘制点
+                ctx.fillRect(dot.x - 0.5, dot.y - 0.5, 1, 1);
+                // 循环比对粒子间的距离
+                for (var i = 0; i < ndots.length; i++) {
+                    var d2 = ndots[i];
+                    if (dot === d2 || d2.x === null || d2.y === null) continue;
+                    var xc = dot.x - d2.x;
+                    var yc = dot.y - d2.y;
+                    // 两个粒子之间的距离
+                    var dis = xc * xc + yc * yc;
+                    // 距离比
+                    var ratio;
+                    // 如果两个粒子之间的距离小于粒子对象的max值，则在两个粒子间画线
+                    if (dis < d2.max) {
+                        // 如果是鼠标，则让粒子向鼠标的位置移动
+                        if (d2 === warea && dis > (d2.max / 2)) {
+                            dot.x -= xc * 0.03;
+                            dot.y -= yc * 0.03;
+                        }
+                        // 计算距离比
+                        ratio = (d2.max - dis) / d2.max;
+                        // 画线
+
+                        ctx.beginPath();
+                        ctx.lineWidth = ratio / 2;
+                        ctx.strokeStyle = 'rgba(255,204,153' + (ratio + 0.2) + ')';
+                        ctx.moveTo(dot.x, dot.y);
+                        ctx.lineTo(d2.x, d2.y);
+                        ctx.stroke();
+                    }
+                }
+                // 将已经计算过的粒子从数组中删除
+                ndots.splice(ndots.indexOf(dot), 1);
+            });
+            RAF(animate);
+        }
+        //动画
+        //拖动---b
+        var el = document.getElementById('goput');
+        var sortable = Sortable.create(el, {
+            group: {
+                name: "aaa",
+                put: true,
+                pull: true
+            },
+            sort: true, // sorting inside list
+            // onRemove: function (evt) {
+            //     console.log(evt)
+            //     console.log(evt.item.dataset.xx)
+            //     if (evt.item.dataset.xx=="niangpao") {
+            //     	alert("吃到一只娘炮！");
+            //     	// $("#gopull")[0].removeChild(evt.item)    //js原生删除元素
+            //     	//$(evt.item).remove()						//jquery删除元素
+            //     	$("#gopull").empty()
+            //     	$("#gopull").css("background-image","url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1501911037150&di=0f5b265215f14abd7b86a063792fa64d&imgtype=0&src=http%3A%2F%2Fupload.qianhuaweb.com%2F2015%2F1228%2F1451272796422.jpg)")
+            //     	$(evt.to).append($(evt.item))
+            //     }
+
+            // },
+            // onEnd: function (evt) {
+            // 	console.log(evt.item)
+            //     console.log(evt.oldIndex);  // element's old index within parent
+            //     console.log(evt.newIndex);  // element's new index within parent
+            // },
+            animation: 150,
+            // onMove: function (/**Event*/evt, /**Event*/originalEvent) {
+            //     // Example: http://jsbin.com/tuyafe/1/edit?js,output
+            //     console.log(evt)
+            //     console.log(originalEvent)
+            //     console.log(evt.dragged); // dragged HTMLElement
+            //     console.log(evt.draggedRect); // TextRectangle {left, top, right и bottom}
+            //     console.log(evt.related); // HTMLElement on which have guided
+            //     console.log(evt.relatedRect); // TextRectangle
+            //     originalEvent.clientY; // mouse position
+            //     // return false; — for cancel
+            // },
+
+        });
+
+        var el1 = document.getElementById('gopull');
+        var sortablel = Sortable.create(el1, {
+            group: {
+                name: "aaa",
+                put: true,
+                pull: true
+            },
+            sort: true, // sorting inside list
+            onEnd: function(evt) {
+                console.log(evt)
+                console.log(evt.oldIndex); // element's old index within parent
+                console.log(evt.newIndex); // element's new index within parent
+            },
+            onAdd: function( /**Event*/ evt) { //貌似只有add的参数里的from，to可以得到拖出和拖入的目标容器对象
+                //var itemEl = evt.item;  // dragged HTMLElement
+                console.log(evt) // previous list
+                    // + indexes from onEnd
+                if ($(evt.to).children().length === 3) {
+                    $(evt.to).empty()
+                    alert("吃饱了！")
+                    sortable.option("filter", "img")
+                } else {
+
+                    $(evt.to).css("background-image", "url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1501911037150&di=0f5b265215f14abd7b86a063792fa64d&imgtype=0&src=http%3A%2F%2Fupload.qianhuaweb.com%2F2015%2F1228%2F1451272796422.jpg)")
+                    setTimeout(function() {
+                        $(evt.to).css("background-image", "url(https://ss0.bdstatic.com/94oJfD_bAAcT8t7mm9GUKT-xh_/timg?image&quality=100&size=b4000_4000&sec=1501895974&di=64cbeb105f623b487d5f07850f79b11a&src=http://img5.cache.netease.com/henan/2016/1/26/201601261634249972e.jpg)")
+                    }, 1000)
+                }
+            },
+
+        });
+    </script>
 </body>
+
 </html>
